@@ -24,6 +24,15 @@ export const cartSlice = createSlice({
         });
       }
     },
+    decrementFromCart: (state, action: PayloadAction<Items>) => {
+      const item = state.find((item) => item.name === action.payload.name);
+      if (item) {
+        item.quantity -= 1;
+        if (item.quantity === 0) {
+          state.splice(state.indexOf(item), 1);
+        }
+      }
+    },
     removeFromCart: (state, action: PayloadAction<Items>) => {
       const item = state.find((item) => item.name === action.payload.name);
       if (item) {
@@ -36,5 +45,6 @@ export const cartSlice = createSlice({
   },
 });
 
-export const { addToCart, removeFromCart, clearCart } = cartSlice.actions;
+export const { addToCart, decrementFromCart, removeFromCart, clearCart } =
+  cartSlice.actions;
 export default cartSlice.reducer;

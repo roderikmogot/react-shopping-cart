@@ -1,6 +1,11 @@
 import { selectCart } from "./redux/store";
 import { useSelector, useDispatch } from "react-redux";
-import { addToCart, clearCart, removeFromCart } from "./redux/cartSlice";
+import {
+  addToCart,
+  clearCart,
+  removeFromCart,
+  decrementFromCart,
+} from "./redux/cartSlice";
 import { SHOP_ITEMS } from "./constants/items";
 
 function App() {
@@ -9,6 +14,10 @@ function App() {
 
   const addItemHandler = (item: any) => {
     dispatch(addToCart(item));
+  };
+
+  const decrementItemHandler = (item: any) => {
+    dispatch(decrementFromCart(item));
   };
 
   const removeFromCartHandler = (item: any) => {
@@ -44,10 +53,16 @@ function App() {
             <div>{item.price}</div>
             <div>{item.quantity}</div>
             <button
+              className="warning-button"
+              onClick={() => decrementItemHandler(item)}
+            >
+              -
+            </button>
+            <button
               className="button"
               onClick={() => removeFromCartHandler(item)}
             >
-              Remove
+              X
             </button>
           </div>
         ))}
