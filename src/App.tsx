@@ -128,7 +128,7 @@ function App() {
         {shoppingCart &&
           shoppingCart.length > 0 &&
           shoppingCart
-            .sort((a, b) => a - b)
+            .sort((a, b) => b - a)
             .splice(0, 20)
             .map((item: ShoppingCartItem, index) => (
               <div key={item.id}>
