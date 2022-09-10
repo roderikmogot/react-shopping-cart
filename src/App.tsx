@@ -7,9 +7,18 @@ import {
   removeFromCart,
   decrementFromCart,
 } from "./redux/cartSlice";
+
 import { SHOP_ITEMS } from "./constants/items";
+
 import axios from "axios";
+import moment from "moment";
 import toast, { Toaster } from "react-hot-toast";
+
+interface ShoppingCartItem {
+  id: string;
+  createdAt: string;
+  item: string;
+}
 
 function App() {
   const [shoppingCart, setShoppingCart] = useState([]);
@@ -55,6 +64,10 @@ function App() {
     };
     recentlyPlacedCart();
   }, [cart]);
+
+  const timeFormatter = (time: string) => {
+    return moment(time).format("DD/MM/YYYY hh:mm:ss");
+  };
 
   const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
@@ -104,10 +117,31 @@ function App() {
 
       {cart && cart.length > 0 && <div>Total Amount: {total}</div>}
 
-      {cart && cart.length > 0 && <button onClick={() => checkout()}>Checkout</button>}
+      {cart && cart.length > 0 && (
+        <button className="green-button" onClick={() => checkout()}>
+          Checkout
+        </button>
+      )}
 
-      {shoppingCart && shoppingCart.length > 0 && <pre className="whitespace-pre-wrap">{JSON.stringify(shoppingCart)}</pre>}
-
+      <span className="text-2xl">Recently Placed Carts</span>
+      <div className="grid grid-cols-2 gap-4">
+        {shoppingCart &&
+          shoppingCart.length > 0 &&
+          shoppingCart.map((item: ShoppingCartItem, index) => (
+            <div key={item.id}>
+              <div className="font-bold">Created at: {timeFormatter(item.createdAt)}</div>
+              <div className="grid grid-cols-6 gap-2">
+                {JSON.parse(item.item).map((item: any, index: number) => (
+                  <div key={index}>
+                    <div>{item.name}</div>
+                    <div>{item.price}</div>
+                    <div>{item.quantity}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+      </div>
       <Toaster />
     </div>
   );

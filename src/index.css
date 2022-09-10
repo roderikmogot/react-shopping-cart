@@ -11,6 +11,10 @@
   @apply bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded;
 }
 
+.green-button {
+  @apply bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded;
+}
+
 .delete-button {
   @apply bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded;
 }
