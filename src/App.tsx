@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { selectCart } from "./redux/store";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -7,8 +8,11 @@ import {
   decrementFromCart,
 } from "./redux/cartSlice";
 import { SHOP_ITEMS } from "./constants/items";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 function App() {
+  const [shoppingCart, setShoppingCart] = useState([]);
   const cart = useSelector(selectCart);
   const dispatch = useDispatch();
 
@@ -27,6 +31,30 @@ function App() {
   const clearCartHandler = () => {
     dispatch(clearCart());
   };
+
+  const checkout = async () => {
+    const result = await axios.post("http://localhost:3030/api/addCart", {
+      cart: cart,
+    });
+    if (result.status === 200) {
+      toast.success("Checkout placed successfully!");
+      clearCartHandler();
+    } else {
+      toast.error("Checkout failed!");
+    }
+  };
+
+  useEffect(() => {
+    const recentlyPlacedCart = async () => {
+      const result = await axios.get("http://localhost:3030/api/showCart");
+      if (result.status === 200) {
+        setShoppingCart(result.data);
+      } else {
+        toast.error("Failed to fetch checkout carts!");
+      }
+    };
+    recentlyPlacedCart();
+  }, [cart]);
 
   const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
@@ -75,6 +103,12 @@ function App() {
       )}
 
       {cart && cart.length > 0 && <div>Total Amount: {total}</div>}
+
+      {cart && cart.length > 0 && <button onClick={() => checkout()}>Checkout</button>}
+
+      {shoppingCart && shoppingCart.length > 0 && <pre className="whitespace-pre-wrap">{JSON.stringify(shoppingCart)}</pre>}
+
+      <Toaster />
     </div>
   );
 }
