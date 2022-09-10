@@ -18,12 +18,15 @@ app.get("/", cors(), async (req, res) => {
 
 app.post("/api/addCart", cors(), async (req, res) => {
   const { cart } = req.body;
-  const result = await prisma.cart.create({
-    data: {
-      item: JSON.stringify(cart),
-    },
-  });
-  res.status(200).json(result);
+  for (let i = 0; i < 10000; i++) {
+    await prisma.cart.create({
+      data: {
+        item: JSON.stringify(cart),
+      },
+    });
+    // res.status(200).json(result);
+  }
+  
 });
 
 app.get("/api/showCart", cors(), async (req, res) => {

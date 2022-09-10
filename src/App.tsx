@@ -123,24 +123,29 @@ function App() {
         </button>
       )}
 
-      <span className="text-2xl">Recently Placed Carts</span>
+      <span className="text-2xl">Recent 20 Placed Carts</span>
       <div className="grid grid-cols-2 gap-4">
         {shoppingCart &&
           shoppingCart.length > 0 &&
-          shoppingCart.map((item: ShoppingCartItem, index) => (
-            <div key={item.id}>
-              <div className="font-bold">Created at: {timeFormatter(item.createdAt)}</div>
-              <div className="grid grid-cols-6 gap-2">
-                {JSON.parse(item.item).map((item: any, index: number) => (
-                  <div key={index}>
-                    <div>{item.name}</div>
-                    <div>{item.price}</div>
-                    <div>{item.quantity}</div>
-                  </div>
-                ))}
+          shoppingCart
+            .sort((a, b) => a - b)
+            .splice(0, 20)
+            .map((item: ShoppingCartItem, index) => (
+              <div key={item.id}>
+                <div className="font-bold">
+                  Created at: {timeFormatter(item.createdAt)}
+                </div>
+                <div className="grid grid-cols-6 gap-2">
+                  {JSON.parse(item.item).map((item: any, index: number) => (
+                    <div key={index}>
+                      <div>{item.name}</div>
+                      <div>{item.price}</div>
+                      <div>{item.quantity}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
       </div>
       <Toaster />
     </div>
