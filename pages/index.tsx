@@ -67,7 +67,7 @@ function App() {
       }
     };
     recentlyPlacedCart();
-  }, [cart]);
+  }, []);
 
   const timeFormatter = (time: string) => {
     return moment(time).format("DD/MM/YYYY hh:mm:ss");
@@ -134,7 +134,7 @@ function App() {
         <div className="grid grid-cols-2 gap-4">
           {shoppingCart &&
             shoppingCart.length > 0 &&
-            shoppingCart.splice(0, 20).map((item: ShoppingCartItem, index) => (
+            shoppingCart.slice().splice(0, 20).map((item: ShoppingCartItem, index) => (
               <div key={item.id}>
                 <div className="font-bold">
                   Created at: {timeFormatter(item.createdAt)}
